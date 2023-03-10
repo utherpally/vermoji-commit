@@ -5,7 +5,7 @@ import {getVermoji} from "./EmojiCommit/EmojiCommit";
 export function activate(context: vscode.ExtensionContext) {
   let disposable = vscode.commands.registerCommand(
     "extension.VermojiCommt",
-    (uri?) => {
+    (sourceControl?) => {
       const git = getGitExtension();
 
       if (!git) {
@@ -17,9 +17,9 @@ export function activate(context: vscode.ExtensionContext) {
 
       vscode.commands.executeCommand("workbench.view.scm");
 
-      if (uri) {
+      if (sourceControl) {
         let selectedRepository = git.repositories.find((repository) => {
-          return repository.rootUri.path === uri._rootUri.path;
+          return repository.rootUri.path === (sourceControl.rootUri || sourceControl._rootUri).path;
         });
         if (selectedRepository) {
           prefixCommit(selectedRepository, emoji);
